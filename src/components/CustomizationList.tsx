@@ -26,6 +26,7 @@ type CustomizationResource = {
       href?: string;
       text?: string;
     }
+    location?: string;
   }
 } & K8sResourceCommon;
 
@@ -92,6 +93,10 @@ const columns: TableColumn<CustomizationResource>[] = [
     title: 'Link',
     id: 'link',
   },
+  {
+    title: 'Location',
+    id: 'location',
+  },
 ];
 
 const PodRow: React.FC<RowProps<CustomizationResource>> = ({ obj, activeColumnIDs }) => {
@@ -110,6 +115,9 @@ const PodRow: React.FC<RowProps<CustomizationResource>> = ({ obj, activeColumnID
       </TableData>
      <TableData id={columns[3].id} activeColumnIDs={activeColumnIDs}>
         {link?.href ? <a href={link.href}>{link.text || link.href}</a> : '-'}
+      </TableData>
+     <TableData id={columns[4].id} activeColumnIDs={activeColumnIDs}>
+        {obj.spec?.location || '-'}
       </TableData>
     </>
   );
