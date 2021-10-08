@@ -1,14 +1,17 @@
 import * as React from 'react';
 import {
-  ListPageHeader,
+  K8sResourceCommon,
   ListPageBody,
+  ListPageFilter,
+  ListPageHeader,
+  ResourceLink,
+  RowFilter,
+  RowProps,
+  TableColumn,
+  TableData,
   VirtualizedTable,
   useK8sWatchResource,
-  K8sResourceCommon,
-  TableData,
-  RowProps,
-  ResourceLink,
-  TableColumn,
+  useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
 
 type CustomizationResource = {
@@ -107,6 +110,24 @@ const PodRow: React.FC<RowProps<CustomizationResource>> = ({ obj, activeColumnID
   );
 };
 
+export const filters: RowFilter[] = [
+  {
+    filterGroupName: 'Kind',
+    type: 'kind',
+    reducer: (obj: K8sResourceCommon) => obj.kind,
+    filter: (input, obj: K8sResourceCommon) => {
+      if (!input.selected?.length) {
+        return true;
+      }
+
+      return input.selected.includes(obj.kind);
+    },
+    items: resources.map(({kind}) => ({ id: kind, title: kind })),
+  },
+];
+
+
+
 type CustomizationTableProps = {
   data: any[];
   unfilteredData: any[];
@@ -140,15 +161,23 @@ const CustomizationList: React.FC<{}> = () => {
     return [data, loaded, error];
   });
 
-  const data = watches.map(([list]) => list).flat();
+  const flatData = watches.map(([list]) => list).flat();
   const loaded = watches.every(([, loaded, error]) => !!(loaded || error));
+
+  const [data, filteredData, onFilterChange] = useListPageFilter(flatData, filters);
 
   return (
     <>
       <ListPageHeader title="Customization" />
       <ListPageBody>
-        <CustomizationTable
+        <ListPageFilter
           data={data}
+          loaded={loaded}
+          rowFilters={filters}
+          onFilterChange={onFilterChange}
+        />
+        <CustomizationTable
+          data={filteredData}
           unfilteredData={data}
           loaded={loaded}
         />
