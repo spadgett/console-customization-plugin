@@ -1,0 +1,88 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: console-customization-plugin
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: console-customization-plugin
+  namespace: console-customization-plugin
+  labels:
+    app: console-customization-plugin
+    app.kubernetes.io/component: console-customization-plugin
+    app.kubernetes.io/instance: console-customization-plugin
+    app.kubernetes.io/part-of: console-customization-plugin
+    app.openshift.io/runtime-namespace: console-customization-plugin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: console-customization-plugin
+  template:
+    metadata:
+      labels:
+        app: console-customization-plugin
+    spec:
+      containers:
+        - name: console-customization-plugin
+          image: quay.io/spadgett/console-customization-plugin:latest
+          ports:
+            - containerPort: 9001
+              protocol: TCP
+          imagePullPolicy: Always
+          args:
+            - '--ssl'
+            - '--cert=/var/serving-cert/tls.crt'
+            - '--key=/var/serving-cert/tls.key'
+          volumeMounts:
+            - name: plugin-serving-cert
+              readOnly: true
+              mountPath: /var/serving-cert
+      volumes:
+        - name: plugin-serving-cert
+          secret:
+            secretName: plugin-serving-cert
+            defaultMode: 420
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.alpha.openshift.io/serving-cert-secret-name: plugin-serving-cert
+  name: console-customization-plugin
+  namespace: console-customization-plugin
+  labels:
+    app: console-customization-plugin
+    app.kubernetes.io/component: console-customization-plugin
+    app.kubernetes.io/instance: console-customization-plugin
+    app.kubernetes.io/part-of: console-customization-plugin
+spec:
+  ports:
+    - name: 9001-tcp
+      protocol: TCP
+      port: 9001
+      targetPort: 9001
+  selector:
+    app: console-customization-plugin
+  type: ClusterIP
+  sessionAffinity: None
+---
+apiVersion: console.openshift.io/v1alpha1
+kind: ConsolePlugin
+metadata:
+  name: console-customization
+spec:
+  displayName: 'OpenShift Console Demo Plugin'
+  service:
+    name: console-customization-plugin
+    namespace: console-customization-plugin
+    port: 9001
+    basePath: '/'

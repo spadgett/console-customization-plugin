@@ -1,0 +1,31 @@
+[
+  {
+    "type": "console.flag/model",
+    "properties": {
+      "flag": "CONSOLE_CUSTOMIZATIONS",
+      "model": {
+        "group": "console.openshift.io",
+        "version": "v1",
+        "kind": "ConsoleLink"
+      }
+    }
+  },
+  {
+    "type": "console.page/route",
+    "properties": {
+      "exact": true,
+      "path": "/customization",
+      "component": { "$codeRef": "CustomizationList" }
+    }
+  },
+  {
+    "type": "console.navigation/href",
+    "properties": {
+      "id": "customization",
+      "name": "Customization",
+      "href": "/customization",
+      "perspective": "admin",
+      "section": "administration"
+    }
+  }
+]

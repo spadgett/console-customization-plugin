@@ -1,0 +1,49 @@
+{
+  "name": "console-customization-plugin",
+  "version": "0.0.0",
+  "private": true,
+  "repository": "git@github.com:spadgett/console-customization-plugin.git",
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "yarn clean && NODE_ENV=production yarn ts-node node_modules/.bin/webpack",
+    "build-dev": "yarn clean && yarn ts-node node_modules/.bin/webpack",
+    "build-plugin-sdk": "yarn --cwd .. build-plugin-sdk && rm -rf node_modules/@openshift-console && yarn install --check-files",
+    "http-server": "./http-server.sh dist",
+    "i18n": "i18next \"src/**/*.{js,jsx,ts,tsx}\" [-oc] -c i18next-parser.config.js",
+    "ts-node": "ts-node -O '{\"module\":\"commonjs\"}' -I '/node_modules/(?!(@openshift-console)/)/'"
+  },
+  "dependencies": {
+    "react": "16.9.0",
+    "react-helmet": "^6.1.0",
+    "react-i18next": "^11.8.11",
+    "react-router": "5.1.2",
+    "react-router-dom": "5.1.2"
+  },
+  "devDependencies": {
+    "@openshift-console/dynamic-plugin-sdk": "0.0.2",
+    "@openshift-console/dynamic-plugin-sdk-webpack": "0.0.2",
+    "@types/node": "^16.10.3",
+    "@types/react": "16.8.13",
+    "@types/react-router-dom": "5.1.2",
+    "comment-json": "4.x",
+    "http-server": "^13.0.2",
+    "read-pkg": "5.x",
+    "ts-loader": "^7.0.5",
+    "ts-node": "^5.0.1",
+    "typescript": "^4.4.3",
+    "webpack": "5.0.0-beta.16",
+    "webpack-cli": "^4.9.0"
+  },
+  "consolePlugin": {
+    "name": "console-customization",
+    "version": "0.0.1",
+    "displayName": "OpenShift Console Customization Plugin",
+    "description": "Allows you to work with ConsoleLink and other customization resources.",
+    "exposedModules": {
+      "CustomizationList": "./components/CustomizationList.tsx"
+    },
+    "dependencies": {
+      "@console/pluginAPI": "*"
+    }
+  }
+}
