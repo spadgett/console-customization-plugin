@@ -2,6 +2,7 @@ import * as React from 'react';
 import {
   K8sResourceCommon,
   ListPageBody,
+  ListPageCreateDropdown,
   ListPageFilter,
   ListPageHeader,
   ResourceLink,
@@ -13,6 +14,7 @@ import {
   useK8sWatchResource,
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
+import { useHistory } from "react-router-dom";
 
 type CustomizationResource = {
   spec?: {
@@ -64,9 +66,7 @@ const resources = [
 // TODO: Use utility when available in the SDK.
 const referenceFor = (group: string, version: string, kind: string) => `${group}~${version}~${kind}`;
 
-// TODO: Use utility when available in the SDK.
 const referenceForObj = (obj: K8sResourceCommon) => {
-  // Assumes obj has an API group
   const [group, version] = obj.apiVersion.split('/');
   return referenceFor(group, version, obj.kind);
 };
@@ -149,6 +149,7 @@ const CustomizationTable: React.FC<CustomizationTableProps> = ({ data, unfiltere
 };
 
 const CustomizationList: React.FC<{}> = () => {
+  const history = useHistory();
   const watches = resources.map(({group, version, kind}) => {
     const [data, loaded, error] = useK8sWatchResource<CustomizationResource[]>({
       kind: referenceFor(group, version, kind),
@@ -163,12 +164,22 @@ const CustomizationList: React.FC<{}> = () => {
 
   const flatData = watches.map(([list]) => list).flat();
   const loaded = watches.every(([, loaded, error]) => !!(loaded || error));
-
   const [data, filteredData, onFilterChange] = useListPageFilter(flatData, filters);
-
+  const createItems = resources.reduce((acc, {group, version, kind}) => {
+    acc[referenceFor(group, version, kind)] = kind;
+    return acc;
+  }, {});
+  const onCreate = (reference: string) => {
+    // TODO: Use utility when available in the SDK.
+    // FIXME: This doesn't handle context roots.
+    const path = `/k8s/cluster/${reference}/~new`;
+    history.push(path);
+  };
   return (
     <>
-      <ListPageHeader title="Customization" />
+      <ListPageHeader title="Customization">
+        <ListPageCreateDropdown items={createItems} onClick={onCreate}>Create</ListPageCreateDropdown>
+      </ListPageHeader>
       <ListPageBody>
         <ListPageFilter
           data={data}
