@@ -5,6 +5,7 @@ extends:
   - eslint:recommended
   - plugin:react/recommended
   - plugin:@typescript-eslint/recommended
+  - prettier
 parser: '@typescript-eslint/parser'
 parserOptions:
   ecmaFeatures:
@@ -12,21 +13,12 @@ parserOptions:
   ecmaVersion: 2016
   sourceType: module
 plugins:
+  - prettier
   - react
   - '@typescript-eslint'
 rules:
-  indent:
+  prettier/prettier:
     - error
-    - 4
-  linebreak-style:
-    - error
-    - unix
-  quotes:
-    - error
-    - single
-  semi:
-    - error
-    - always
 settings:
   react:
     version: detect
