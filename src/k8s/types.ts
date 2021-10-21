@@ -1,4 +1,4 @@
-import { K8sResourceCommon } from "@openshift-console/dynamic-plugin-sdk";
+import { K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
 
 // Union type for all console.openshift.io customization resources.
 export type CustomizationResource = {
@@ -19,10 +19,10 @@ export type ConsoleLink = {
   spec: {
     href: string;
     location:
-      | "ApplicationMenu"
-      | "HelpMenu"
-      | "UserMenu"
-      | "NamespaceDashboard";
+      | 'ApplicationMenu'
+      | 'HelpMenu'
+      | 'UserMenu'
+      | 'NamespaceDashboard';
     text: string;
   };
 } & K8sResourceCommon;
