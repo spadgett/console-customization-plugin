@@ -27,5 +27,16 @@
       "perspective": "admin",
       "section": "administration"
     }
+  },
+  {
+    "type": "console.resource/create",
+    "properties": {
+      "model": {
+        "group": "console.openshift.io",
+        "version": "v1",
+        "kind": "ConsoleLink"
+      },
+      "component": { "$codeRef": "CreateConsoleLinkPage" }
+    }
   }
 ]

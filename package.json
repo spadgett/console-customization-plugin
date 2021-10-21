@@ -12,22 +12,26 @@
     "i18n": "i18next \"src/**/*.{js,jsx,ts,tsx}\" [-oc] -c i18next-parser.config.js",
     "ts-node": "ts-node -O '{\"module\":\"commonjs\"}' -I '/node_modules/(?!(@openshift-console)/)/'"
   },
-  "dependencies": {
-    "react": "16.9.0",
-    "react-helmet": "^6.1.0",
-    "react-i18next": "^11.8.11",
-    "react-router": "5.1.2",
-    "react-router-dom": "5.1.2"
-  },
   "devDependencies": {
     "@openshift-console/dynamic-plugin-sdk": "0.0.2",
     "@openshift-console/dynamic-plugin-sdk-webpack": "0.0.2",
+    "@patternfly/react-core": "4.157.8",
     "@types/node": "^16.10.3",
     "@types/react": "16.8.13",
+    "@types/react-helmet": "5.x",
     "@types/react-router-dom": "5.1.2",
     "comment-json": "4.x",
+    "css-loader": "^5.2.7",
+    "file-loader": "1.x",
     "http-server": "^13.0.2",
     "read-pkg": "5.x",
+    "react": "16.9.0",
+    "react-dom": "^17.0.1",
+    "react-helmet": "^6.1.0",
+    "react-i18next": "^11.8.11",
+    "react-router": "5.1.2",
+    "react-router-dom": "5.1.2",
+    "style-loader": "^2.0.0",
     "ts-loader": "^7.0.5",
     "ts-node": "^5.0.1",
     "typescript": "^4.4.3",
@@ -40,7 +44,8 @@
     "displayName": "OpenShift Console Customization Plugin",
     "description": "Allows you to work with ConsoleLink and other customization resources.",
     "exposedModules": {
-      "CustomizationList": "./components/CustomizationList.tsx"
+      "CustomizationList": "./components/CustomizationList",
+      "CreateConsoleLinkPage": "./components/forms/CreateConsoleLinkPage"
     },
     "dependencies": {
       "@console/pluginAPI": "*"

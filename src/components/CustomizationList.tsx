@@ -15,20 +15,8 @@ import {
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useHistory } from "react-router-dom";
-
-type CustomizationResource = {
-  spec?: {
-    displayName?: string;
-    description?: string;
-    href?: string;
-    text?: string;
-    link?: {
-      href?: string;
-      text?: string;
-    }
-    location?: string;
-  }
-} & K8sResourceCommon;
+import { CustomizationResource } from '../k8s/types';
+import { referenceFor, referenceForObj } from '../k8s/resources';
 
 const resources = [
   {
@@ -67,14 +55,6 @@ const resources = [
     kind: 'ConsolePlugin',
   },
 ];
-
-// TODO: Use utility when available in the SDK.
-const referenceFor = (group: string, version: string, kind: string) => `${group}~${version}~${kind}`;
-
-const referenceForObj = (obj: K8sResourceCommon) => {
-  const [group, version] = obj.apiVersion.split('/');
-  return referenceFor(group, version, obj.kind);
-};
 
 const columns: TableColumn<CustomizationResource>[] = [
   {
