@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Helmet from 'react-helmet';
 import { useHistory } from 'react-router';
-import { consoleFetch } from '@openshift-console/dynamic-plugin-sdk';
+import { k8sCreate, useK8sModel } from '@openshift-console/dynamic-plugin-sdk';
 import {
   ActionGroup,
   Alert,
@@ -19,7 +19,7 @@ import {
 import CaretDownIcon from '@patternfly/react-icons/dist/js/icons/caret-down-icon';
 
 import { ConsoleLink } from '../../k8s/types';
-import { referenceForObj } from '../../k8s/resources';
+import { referenceFor } from '../../k8s/resources';
 
 const locations: ConsoleLink['spec']['location'][] = [
   'ApplicationMenu',
@@ -27,7 +27,10 @@ const locations: ConsoleLink['spec']['location'][] = [
   'UserMenu',
 ];
 
+const reference = referenceFor('console.openshift.io', 'v1', 'ConsoleLink');
+
 const CreateConsoleLinkPage = () => {
+  const [model] = useK8sModel(reference);
   const [name, setName] = React.useState('');
   const [text, setText] = React.useState('');
   const [location, setLocation] =
@@ -51,7 +54,7 @@ const CreateConsoleLinkPage = () => {
   });
 
   const createLink = async () => {
-    const link: ConsoleLink = {
+    const data: ConsoleLink = {
       apiVersion: 'console.openshift.io/v1',
       kind: 'ConsoleLink',
       metadata: {
@@ -64,18 +67,7 @@ const CreateConsoleLinkPage = () => {
       },
     };
 
-    // TODO: Use `k8sCreate` when available in the SDK.
-    const response = await consoleFetch(
-      '/api/kubernetes/apis/console.openshift.io/v1/consolelinks/',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(link),
-      },
-    );
-    return response.json();
+    return await k8sCreate({ model, data });
   };
 
   const cancel = () => {
@@ -88,9 +80,7 @@ const CreateConsoleLinkPage = () => {
     try {
       const created = await createLink();
       // FIXME: Use SDK method for building path when available.
-      const path = `/k8s/cluster/${referenceForObj(created)}/${
-        created.metadata.name
-      }`;
+      const path = `/k8s/cluster/${reference}/${created.metadata.name}`;
       history.push(path);
     } catch (e) {
       setError(e.message || 'An error occurred');
