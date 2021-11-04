@@ -24,5 +24,24 @@ export type ConsoleLink = {
       | 'UserMenu'
       | 'NamespaceDashboard';
     text: string;
+    applicationMenu?: {
+      section: string;
+    };
+  };
+} & K8sResourceCommon;
+
+export type ConsoleNotification = {
+  spec: {
+    backgroundColor?: string;
+    color?: string;
+    link?: {
+      href: string;
+      text: string;
+    };
+    location?:
+      | 'BannerTop'
+      | 'BannerBottom'
+      | 'BannerTopBottom'
+    text: string;
   };
 } & K8sResourceCommon;

@@ -51,7 +51,8 @@
     "description": "Allows you to work with ConsoleLink and other customization resources.",
     "exposedModules": {
       "CustomizationList": "./components/CustomizationList",
-      "CreateConsoleLinkPage": "./components/forms/CreateConsoleLinkPage"
+      "CreateConsoleLinkPage": "./components/forms/CreateConsoleLinkPage",
+      "CreateConsoleNotificationPage": "./components/forms/CreateConsoleNotificationPage"
     },
     "dependencies": {
       "@console/pluginAPI": "*"

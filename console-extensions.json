@@ -38,5 +38,16 @@
       },
       "component": { "$codeRef": "CreateConsoleLinkPage" }
     }
+  },
+  {
+    "type": "console.resource/create",
+    "properties": {
+      "model": {
+        "group": "console.openshift.io",
+        "version": "v1",
+        "kind": "ConsoleNotification"
+      },
+      "component": { "$codeRef": "CreateConsoleNotificationPage" }
+    }
   }
 ]
