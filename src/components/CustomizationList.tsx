@@ -66,8 +66,8 @@ const columns: TableColumn<CustomizationResource>[] = [
     id: 'kind',
   },
   {
-    title: 'Display Name',
-    id: 'displayName',
+    title: 'Label',
+    id: 'label',
   },
   {
     title: 'Link',
@@ -95,10 +95,10 @@ const PodRow = ({ obj, activeColumnIDs }: RowProps<CustomizationResource>) => {
         {obj.kind}
       </TableData>
       <TableData id={columns[2].id} activeColumnIDs={activeColumnIDs}>
-        {obj.spec?.displayName || '-'}
+        {obj.spec?.displayName || link?.text || '-'}
       </TableData>
       <TableData id={columns[3].id} activeColumnIDs={activeColumnIDs}>
-        {link?.href ? <a href={link.href}>{link.text || link.href}</a> : '-'}
+        {link?.href ? <a href={link.href}>{link.href}</a> : '-'}
       </TableData>
       <TableData id={columns[4].id} activeColumnIDs={activeColumnIDs}>
         {obj.spec?.location || '-'}
