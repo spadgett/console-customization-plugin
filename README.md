@@ -1,7 +1,7 @@
 # OpenShift Console Customizations Plugin
 
 This project is a simple plugin that adds a Customizations nav item to the
-Administrator perspective in OpenShift console. It requires OpenShift 4.9 to
+Administrator perspective in OpenShift console. It requires OpenShift 4.10 to
 use.
 
 ## Local development
