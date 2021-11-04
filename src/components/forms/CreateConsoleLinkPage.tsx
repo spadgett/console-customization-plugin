@@ -21,10 +21,6 @@ import CaretDownIcon from '@patternfly/react-icons/dist/js/icons/caret-down-icon
 import { ConsoleLink } from '../../k8s/types';
 import { referenceForObj } from '../../k8s/resources';
 
-// FIXME: Using PF buttons in a plugin causes the button styles to be imported
-// twice, which overrides the skip to content button styles and breaks page layout.
-import '../../styles/pf-fix.css';
-
 const locations: ConsoleLink['spec']['location'][] = [
   'ApplicationMenu',
   'HelpMenu',
