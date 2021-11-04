@@ -36,6 +36,7 @@ const CreateConsoleLinkPage = () => {
   const [location, setLocation] =
     React.useState<ConsoleLink['spec']['location']>('ApplicationMenu');
   const [href, setHref] = React.useState('');
+  const [section, setSection] = React.useState('');
   const [locationDropdownOpen, setLocationDropdownOpen] = React.useState(false);
   const [inFlight, setInFlight] = React.useState(false);
   const [error, setError] = React.useState('');
@@ -64,6 +65,13 @@ const CreateConsoleLinkPage = () => {
         href,
         text,
         location,
+        ...(location === 'ApplicationMenu'
+          ? {
+              applicationMenu: {
+                section,
+              },
+            }
+          : {}),
       },
     };
 
@@ -147,6 +155,18 @@ const CreateConsoleLinkPage = () => {
                 onChange={setHref}
               />
             </FormGroup>
+            {location === 'ApplicationMenu' && (
+              <FormGroup label="Section" fieldId="section" isRequired>
+                <TextInput
+                  isRequired
+                  type="text"
+                  id="section"
+                  name="section"
+                  value={section}
+                  onChange={setSection}
+                />
+              </FormGroup>
+            )}
             {error && (
               <Alert variant="danger" isInline title="Error creating link">
                 {error}
