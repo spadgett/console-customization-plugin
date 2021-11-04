@@ -9,6 +9,7 @@ const {
 
 const config: webpack.Configuration = {
   mode: "development",
+  entry: {},
   context: path.resolve(__dirname, "src"),
   output: {
     path: path.resolve(__dirname, "dist"),
@@ -41,6 +42,12 @@ const config: webpack.Configuration = {
         loader: "file-loader",
         options: {
           name: "assets/[name].[ext]",
+        },
+      },
+      {
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false,
         },
       },
     ],
