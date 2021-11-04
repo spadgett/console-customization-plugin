@@ -80,7 +80,7 @@ kind: ConsolePlugin
 metadata:
   name: console-customization
 spec:
-  displayName: 'OpenShift Console Demo Plugin'
+  displayName: 'OpenShift Console Customization Plugin'
   service:
     name: console-customization-plugin
     namespace: console-customization-plugin
