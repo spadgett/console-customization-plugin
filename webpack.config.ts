@@ -9,6 +9,7 @@ const {
 
 const config: webpack.Configuration = {
   mode: "development",
+  // No regular entry points. The remote container entry is handled by ConsoleRemotePlugin.
   entry: {},
   context: path.resolve(__dirname, "src"),
   output: {
