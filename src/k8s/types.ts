@@ -38,10 +38,7 @@ export type ConsoleNotification = {
       href: string;
       text: string;
     };
-    location?:
-      | 'BannerTop'
-      | 'BannerBottom'
-      | 'BannerTopBottom'
+    location?: 'BannerTop' | 'BannerBottom' | 'BannerTopBottom';
     text: string;
   };
 } & K8sResourceCommon;

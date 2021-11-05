@@ -11,6 +11,8 @@ import {
   DropdownToggle,
   Form,
   FormGroup,
+  FormSection,
+  Grid,
   Page,
   PageSection,
   TextInput,
@@ -27,7 +29,11 @@ const locations: ConsoleNotification['spec']['location'][] = [
   'BannerTopBottom',
 ];
 
-const reference = referenceFor('console.openshift.io', 'v1', 'ConsoleNotification');
+const reference = referenceFor(
+  'console.openshift.io',
+  'v1',
+  'ConsoleNotification',
+);
 
 const CreateConsoleNotificationPage = () => {
   const [model] = useK8sModel(reference);
@@ -35,6 +41,8 @@ const CreateConsoleNotificationPage = () => {
   const [text, setText] = React.useState('');
   const [location, setLocation] =
     React.useState<ConsoleNotification['spec']['location']>('BannerTop');
+  const [color, setColor] = React.useState('#ffffff');
+  const [backgroundColor, setBackgroundColor] = React.useState('#004b95');
   const [locationDropdownOpen, setLocationDropdownOpen] = React.useState(false);
   const [inFlight, setInFlight] = React.useState(false);
   const [error, setError] = React.useState('');
@@ -60,8 +68,10 @@ const CreateConsoleNotificationPage = () => {
         name,
       },
       spec: {
-        text,
+        backgroundColor,
+        color,
         location,
+        text,
       },
     };
 
@@ -110,7 +120,7 @@ const CreateConsoleNotificationPage = () => {
                 onChange={setName}
               />
             </FormGroup>
-            <FormGroup label="Location" fieldId="location" isRequired>
+            <FormGroup label="Location" fieldId="location">
               <Dropdown
                 toggle={
                   <DropdownToggle
@@ -135,6 +145,43 @@ const CreateConsoleNotificationPage = () => {
                 onChange={setText}
               />
             </FormGroup>
+            <FormSection title="Colors">
+              <Grid hasGutter md={6}>
+                <FormGroup label="Foreground" fieldId="color" isInline>
+                  <input
+                    type="color"
+                    id="color"
+                    value={color}
+                    onChange={(e) => setColor(e.currentTarget.value)}
+                  />
+                </FormGroup>
+                <FormGroup
+                  label="Background"
+                  fieldId="backgroundColor"
+                  isInline
+                >
+                  <input
+                    type="color"
+                    id="backgroundColor"
+                    value={backgroundColor}
+                    onChange={(e) => setBackgroundColor(e.currentTarget.value)}
+                  />
+                </FormGroup>
+              </Grid>
+            </FormSection>
+            <FormSection title="Preview">
+              <div
+                className="co-global-notification"
+                data-test="test-BannerTop"
+                style={{ backgroundColor, color }}
+              >
+                <div className="co-global-notification__content">
+                  <p className="co-global-notification__text">
+                    {text || 'Your text here...'}
+                  </p>
+                </div>
+              </div>
+            </FormSection>
             {error && (
               <Alert variant="danger" isInline title="Error creating link">
                 {error}
