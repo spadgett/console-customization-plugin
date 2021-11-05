@@ -96,6 +96,7 @@ const CreateConsoleNotificationPage = () => {
     }
   };
 
+  const textPlaceholder = 'Your message here...';
   return (
     <>
       <Helmet>
@@ -110,7 +111,12 @@ const CreateConsoleNotificationPage = () => {
       >
         <PageSection variant="light">
           <Form isWidthLimited onSubmit={submit}>
-            <FormGroup label="Name" fieldId="name" isRequired>
+            <FormGroup
+              label="Name"
+              fieldId="name"
+              isRequired
+              helperText="Unique name for the notification. This is not displayed to the user."
+            >
               <TextInput
                 isRequired
                 type="text"
@@ -118,6 +124,7 @@ const CreateConsoleNotificationPage = () => {
                 name="name"
                 value={name}
                 onChange={setName}
+                placeholder="my-notification"
               />
             </FormGroup>
             <FormGroup label="Location" fieldId="location">
@@ -135,7 +142,12 @@ const CreateConsoleNotificationPage = () => {
                 dropdownItems={locationDropdownItems}
               />
             </FormGroup>
-            <FormGroup label="Text" fieldId="text" isRequired>
+            <FormGroup
+              label="Text"
+              fieldId="text"
+              isRequired
+              helperText="Message to show the user."
+            >
               <TextInput
                 isRequired
                 type="text"
@@ -143,6 +155,7 @@ const CreateConsoleNotificationPage = () => {
                 name="text"
                 value={text}
                 onChange={setText}
+                placeholder={textPlaceholder}
               />
             </FormGroup>
             <FormSection title="Colors">
@@ -177,7 +190,7 @@ const CreateConsoleNotificationPage = () => {
               >
                 <div className="co-global-notification__content">
                   <p className="co-global-notification__text">
-                    {text || 'Your text here...'}
+                    {text || textPlaceholder}
                   </p>
                 </div>
               </div>

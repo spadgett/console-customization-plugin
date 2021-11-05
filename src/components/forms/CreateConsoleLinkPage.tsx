@@ -110,7 +110,12 @@ const CreateConsoleLinkPage = () => {
       >
         <PageSection variant="light">
           <Form isWidthLimited onSubmit={submit}>
-            <FormGroup label="Name" fieldId="name" isRequired>
+            <FormGroup
+              label="Name"
+              fieldId="name"
+              isRequired
+              helperText="Unique name for the link. This is not displayed to the user."
+            >
               <TextInput
                 isRequired
                 type="text"
@@ -118,9 +123,10 @@ const CreateConsoleLinkPage = () => {
                 name="name"
                 value={name}
                 onChange={setName}
+                placeholder="my-link"
               />
             </FormGroup>
-            <FormGroup label="Location" fieldId="location" isRequired>
+            <FormGroup label="Location" fieldId="location">
               <Dropdown
                 toggle={
                   <DropdownToggle
@@ -135,7 +141,12 @@ const CreateConsoleLinkPage = () => {
                 dropdownItems={locationDropdownItems}
               />
             </FormGroup>
-            <FormGroup label="Text" fieldId="text" isRequired>
+            <FormGroup
+              label="Text"
+              fieldId="text"
+              isRequired
+              helperText="Label for the link."
+            >
               <TextInput
                 isRequired
                 type="text"
@@ -145,7 +156,12 @@ const CreateConsoleLinkPage = () => {
                 onChange={setText}
               />
             </FormGroup>
-            <FormGroup label="Link" fieldId="href" isRequired>
+            <FormGroup
+              label="Link"
+              fieldId="href"
+              isRequired
+              helperText="Link URL. Must start with https://"
+            >
               <TextInput
                 isRequired
                 type="url"
@@ -153,10 +169,16 @@ const CreateConsoleLinkPage = () => {
                 name="href"
                 value={href}
                 onChange={setHref}
+                placeholder="https://www.example.com/"
               />
             </FormGroup>
             {location === 'ApplicationMenu' && (
-              <FormGroup label="Section" fieldId="section" isRequired>
+              <FormGroup
+                label="Section"
+                fieldId="section"
+                isRequired
+                helperText="Section to use in the application launcher dropdown. Can be any text."
+              >
                 <TextInput
                   isRequired
                   type="text"
