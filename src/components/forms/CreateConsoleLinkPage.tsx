@@ -27,10 +27,13 @@ const locations: ConsoleLink['spec']['location'][] = [
   'UserMenu',
 ];
 
-const reference = referenceFor('console.openshift.io', 'v1', 'ConsoleLink');
+const group = 'console.openshift.io';
+const version = 'v1';
+const kind = 'ConsoleLinke';
+const reference = referenceFor(group, version, kind);
 
 const CreateConsoleLinkPage = () => {
-  const [model] = useK8sModel(reference);
+  const [model] = useK8sModel({ group, version, kind });
   const [name, setName] = React.useState('');
   const [text, setText] = React.useState('');
   const [location, setLocation] =

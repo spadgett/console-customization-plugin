@@ -11,12 +11,13 @@ import {
   TableColumn,
   TableData,
   VirtualizedTable,
+  getGroupVersionKindForResource,
   useK8sWatchResource,
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useHistory } from 'react-router-dom';
 import { CustomizationResource } from '../k8s/types';
-import { referenceFor, referenceForObj } from '../k8s/resources';
+import { referenceFor } from '../k8s/resources';
 
 const resources = [
   {
@@ -80,13 +81,13 @@ const columns: TableColumn<CustomizationResource>[] = [
 ];
 
 const PodRow = ({ obj, activeColumnIDs }: RowProps<CustomizationResource>) => {
-  const reference = referenceForObj(obj);
+  const groupVersionKind = getGroupVersionKindForResource(obj);
   const link = obj.spec?.link || obj.spec;
   return (
     <>
       <TableData id={columns[0].id} activeColumnIDs={activeColumnIDs}>
         <ResourceLink
-          kind={reference}
+          groupVersionKind={groupVersionKind}
           name={obj.metadata.name}
           namespace={obj.metadata.namespace}
         />
@@ -154,7 +155,7 @@ const CustomizationList = () => {
   const history = useHistory();
   const watches = resources.map(({ group, version, kind }) => {
     const [data, loaded, error] = useK8sWatchResource<CustomizationResource[]>({
-      kind: referenceFor(group, version, kind),
+      groupVersionKind: { group, version, kind },
       isList: true,
       namespaced: false,
     });

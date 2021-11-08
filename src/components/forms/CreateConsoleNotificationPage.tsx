@@ -29,14 +29,13 @@ const locations: ConsoleNotification['spec']['location'][] = [
   'BannerTopBottom',
 ];
 
-const reference = referenceFor(
-  'console.openshift.io',
-  'v1',
-  'ConsoleNotification',
-);
+const group = 'console.openshift.io';
+const version = 'v1';
+const kind = 'ConsoleNotification';
+const reference = referenceFor(group, version, kind);
 
 const CreateConsoleNotificationPage = () => {
-  const [model] = useK8sModel(reference);
+  const [model] = useK8sModel({ group, version, kind });
   const [name, setName] = React.useState('');
   const [text, setText] = React.useState('');
   const [location, setLocation] =
