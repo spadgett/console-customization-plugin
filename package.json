@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@openshift-console/dynamic-plugin-sdk": "0.0.3",
-    "@openshift-console/dynamic-plugin-sdk-webpack": "0.0.2-wp5",
+    "@openshift-console/dynamic-plugin-sdk-webpack": "0.0.3",
     "@patternfly/react-core": "4.162.2",
     "@types/node": "^16.11.6",
     "@types/react": "^17.0.34",
