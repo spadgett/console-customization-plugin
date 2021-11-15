@@ -80,7 +80,7 @@ const columns: TableColumn<CustomizationResource>[] = [
   },
 ];
 
-const PodRow = ({ obj, activeColumnIDs }: RowProps<CustomizationResource>) => {
+const Row = ({ obj, activeColumnIDs }: RowProps<CustomizationResource>) => {
   const groupVersionKind = getGroupVersionKindForResource(obj);
   const link = obj.spec?.link || obj.spec;
   return (
@@ -146,7 +146,7 @@ const CustomizationTable = ({
       loaded={loaded}
       loadError={loadError}
       columns={columns}
-      Row={PodRow}
+      Row={Row}
     />
   );
 };
