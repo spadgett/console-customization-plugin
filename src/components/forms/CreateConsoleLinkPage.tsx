@@ -29,7 +29,7 @@ const locations: ConsoleLink['spec']['location'][] = [
 
 const group = 'console.openshift.io';
 const version = 'v1';
-const kind = 'ConsoleLinke';
+const kind = 'ConsoleLink';
 const reference = referenceFor(group, version, kind);
 
 const CreateConsoleLinkPage = () => {
