@@ -6,8 +6,9 @@ use.
 
 ## Local development
 
-1. `yarn build` to build the plugin, generating output to `dist` directory
-2. `yarn http-server` to start an HTTP server hosting the generated assets
+1. `yarn install` to install dependencies
+2. `yarn run build` to build the plugin, generating output to `dist` directory
+3. `yarn run http-server` to start an HTTP server hosting the generated assets
 
 ```
 Starting up http-server, serving ./dist
@@ -23,7 +24,7 @@ The server runs on port 9001 with caching disabled and CORS enabled. Additional
 the script, for example:
 
 ```sh
-yarn http-server -a 127.0.0.1
+yarn run http-server -a 127.0.0.1
 ```
 
 See the plugin development section in
