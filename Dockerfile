@@ -1,9 +1,10 @@
-FROM node:14
+FROM node:16 AS build
 
+ADD . /usr/src/app
 WORKDIR /usr/src/app
-COPY . /usr/src/app
-RUN yarn install
-RUN yarn build
+RUN yarn install && yarn build
 
-EXPOSE 9001
-ENTRYPOINT [ "./http-server.sh", "./dist" ]
+FROM nginx:stable
+
+RUN chmod g+rwx /var/cache/nginx /var/run /var/log/nginx
+COPY --from=build /usr/src/app/dist /usr/share/nginx/html

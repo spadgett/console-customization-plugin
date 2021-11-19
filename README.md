@@ -36,28 +36,18 @@ on how to run Bridge using local plugins.
 You can deploy the plugin to a cluster by applying `oc-manifest.yaml`.
 
 ```sh
-oc apply -f oc-manifest.yaml
+oc apply -f manifest.yaml
 ```
 
-Once deployed, edit the [Console
-operator](https://github.com/openshift/console-operator) config and make sure
-the plugin's name is listed in the `spec.plugins` sequence (add one if missing):
+Once deployed, patch the
+[Console operator](https://github.com/openshift/console-operator)
+config to enable the plugin.
 
 ```sh
-oc edit console.operator.openshift.io cluster
-```
-
-```yaml
-# ...
-spec:
-  plugins:
-    - console-customizations
-# ...
+oc patch consoles.operator.openshift.io cluster --patch '{ "spec": { "plugins": ["console-customization"] } }' --type=merge
 ```
 
 ## Docker image
-
-Following commands should be executed in Console repository root.
 
 1. Build the image:
    ```sh
@@ -65,7 +55,7 @@ Following commands should be executed in Console repository root.
    ```
 2. Run the image:
    ```sh
-   docker run -it -p 9001:9001 quay.io/$USER/console-customization-plugin:latest
+   docker run -it --rm -d -p 9001:80 quay.io/$USER/console-customization-plugin:latest
    ```
 3. Push the image to image registry:
    ```sh
