@@ -6,34 +6,18 @@ use.
 
 ## Local development
 
-1. `yarn install` to install dependencies
-2. `yarn run build` to build the plugin, generating output to `dist` directory
-3. `yarn run http-server` to start an HTTP server hosting the generated assets
+1. `yarn install`
+2. `yarn run start`
 
-```
-Starting up http-server, serving ./dist
-Available on:
-  http://127.0.0.1:9001
-  http://192.168.1.190:9001
-  http://10.40.192.80:9001
-Hit CTRL-C to stop the server
-```
-
-The server runs on port 9001 with caching disabled and CORS enabled. Additional
-[server options](https://github.com/http-party/http-server#available-options) can be passed to
-the script, for example:
-
-```sh
-yarn run http-server -a 127.0.0.1
-```
+The server runs on port 9001 with CORS enabled.
 
 See the plugin development section in
-[Console Dynamic Plugins README](https://github.com/openshift/console/tree/master/frontend/packages/console-dynamic-plugin-sdk/README.md) for details
-on how to run Bridge using local plugins.
+[Console Dynamic Plugins README](https://github.com/openshift/console/tree/master/frontend/packages/console-dynamic-plugin-sdk/README.md)
+for details on how to run OpenShift console using local plugins.
 
 ## Deployment on cluster
 
-You can deploy the plugin to a cluster by applying `oc-manifest.yaml`.
+You can deploy the plugin to a cluster by applying `manifest.yaml`.
 
 ```sh
 oc apply -f manifest.yaml
@@ -62,4 +46,4 @@ oc patch consoles.operator.openshift.io cluster --patch '{ "spec": { "plugins": 
    docker push quay.io/$USER/console-customization-plugin:latest
    ```
 
-Update and apply `oc-manifest.yaml` to use a custom plugin image.
+Update and apply `manifest.yaml` to use a custom plugin image.

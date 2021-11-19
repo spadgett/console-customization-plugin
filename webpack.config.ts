@@ -1,13 +1,15 @@
 /* eslint-env node */
 
-import * as webpack from "webpack";
+import { Configuration as WebpackConfiguration } from "webpack";
+import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";
 import * as path from "path";
+import { ConsoleRemotePlugin } from "@openshift-console/dynamic-plugin-sdk-webpack";
 
-const {
-  ConsoleRemotePlugin,
-} = require("@openshift-console/dynamic-plugin-sdk-webpack");
+interface Configuration extends WebpackConfiguration {
+  devServer?: WebpackDevServerConfiguration;
+}
 
-const config: webpack.Configuration = {
+const config: Configuration = {
   mode: "development",
   // No regular entry points. The remote container entry is handled by ConsoleRemotePlugin.
   entry: {},
@@ -52,6 +54,15 @@ const config: webpack.Configuration = {
         },
       },
     ],
+  },
+  devServer: {
+    static: './dist',
+    port: 9001,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Authorization"
+    },
   },
   plugins: [new ConsoleRemotePlugin()],
   devtool: "source-map",
