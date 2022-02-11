@@ -1,19 +1,24 @@
 # OpenShift Console Customizations Plugin
 
-This project is a simple plugin that adds a Customizations nav item to the
+This project is a simple plugin that adds a Customization nav item to the
 Administrator perspective in OpenShift console. It requires OpenShift 4.10 to
 use.
 
 ## Local development
 
+In one terminal window, run:
+
 1. `yarn install`
 2. `yarn run start`
 
-The server runs on port 9001 with CORS enabled.
+In another terminal window, run:
 
-See the plugin development section in
-[Console Dynamic Plugins README](https://github.com/openshift/console/tree/master/frontend/packages/console-dynamic-plugin-sdk/README.md)
-for details on how to run OpenShift console using local plugins.
+1. `oc login`
+2. `yarn run start-console` (requires [Docker](https://www.docker.com) or [podman](https://podman.io))
+
+This will run the OpenShift console in a container connected to the cluster
+you've logged into. The plugin HTTP server runs on port 9001 with CORS enabled.
+Navigate to <http://localhost:9000/example> to see the running plugin.
 
 ## Deployment on cluster
 
