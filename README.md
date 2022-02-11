@@ -18,7 +18,7 @@ In another terminal window, run:
 
 This will run the OpenShift console in a container connected to the cluster
 you've logged into. The plugin HTTP server runs on port 9001 with CORS enabled.
-Navigate to <http://localhost:9000/example> to see the running plugin.
+Navigate to <http://localhost:9000/customization> to see the running plugin.
 
 ## Deployment on cluster
 
