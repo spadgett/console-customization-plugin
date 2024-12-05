@@ -104,14 +104,16 @@ spec:
   type: ClusterIP
   sessionAffinity: None
 ---
-apiVersion: console.openshift.io/v1alpha1
+apiVersion: console.openshift.io/v1
 kind: ConsolePlugin
 metadata:
   name: console-customization
 spec:
   displayName: 'OpenShift Console Customization Plugin'
-  service:
-    name: console-customization-plugin
-    namespace: console-customization-plugin
-    port: 9443
-    basePath: '/'
+  backend:
+    service:
+      name: console-customization-plugin
+      namespace: console-customization-plugin
+      port: 9443
+      basePath: '/'
+    type: Service
