@@ -6,9 +6,6 @@ import {
   ActionGroup,
   Alert,
   Button,
-  Dropdown,
-  DropdownItem,
-  DropdownToggle,
   Form,
   FormGroup,
   Page,
@@ -16,16 +13,18 @@ import {
   TextInput,
   Title,
 } from '@patternfly/react-core';
-import CaretDownIcon from '@patternfly/react-icons/dist/js/icons/caret-down-icon';
+
 
 import { ConsoleLink } from '../../k8s/types';
 import { referenceFor } from '../../k8s/resources';
 
+/*
 const locations: ConsoleLink['spec']['location'][] = [
   'ApplicationMenu',
   'HelpMenu',
   'UserMenu',
 ];
+*/
 
 const group = 'console.openshift.io';
 const version = 'v1';
@@ -36,26 +35,13 @@ const CreateConsoleLinkPage = () => {
   const [model] = useK8sModel({ group, version, kind });
   const [name, setName] = React.useState('');
   const [text, setText] = React.useState('');
-  const [location, setLocation] =
+  const [location, _setLocation] =
     React.useState<ConsoleLink['spec']['location']>('ApplicationMenu');
   const [href, setHref] = React.useState('');
   const [section, setSection] = React.useState('');
-  const [locationDropdownOpen, setLocationDropdownOpen] = React.useState(false);
   const [inFlight, setInFlight] = React.useState(false);
   const [error, setError] = React.useState('');
   const history = useHistory();
-
-  const locationDropdownItems = locations.map((l) => {
-    const onClick = () => {
-      setLocation(l);
-      setLocationDropdownOpen(false);
-    };
-    return (
-      <DropdownItem key={l} component="button" onClick={onClick}>
-        {l}
-      </DropdownItem>
-    );
-  });
 
   const createLink = async () => {
     const data: ConsoleLink = {
@@ -106,18 +92,17 @@ const CreateConsoleLinkPage = () => {
       </Helmet>
       <Page
         additionalGroupedContent={
-          <PageSection variant="light">
+          <PageSection>
             <Title headingLevel="h1">Create ConsoleLink</Title>
           </PageSection>
         }
       >
-        <PageSection variant="light">
+        <PageSection>
           <Form isWidthLimited onSubmit={submit}>
             <FormGroup
               label="Name"
               fieldId="name"
               isRequired
-              helperText="Unique name for the link. This is not displayed to the user."
             >
               <TextInput
                 isRequired
@@ -125,30 +110,17 @@ const CreateConsoleLinkPage = () => {
                 id="name"
                 name="name"
                 value={name}
-                onChange={setName}
+                onChange={(_event, value) => setName(value)}
                 placeholder="my-link"
               />
             </FormGroup>
             <FormGroup label="Location" fieldId="location">
-              <Dropdown
-                toggle={
-                  <DropdownToggle
-                    id="toggle-id"
-                    onToggle={setLocationDropdownOpen}
-                    toggleIndicator={CaretDownIcon}
-                  >
-                    {location}
-                  </DropdownToggle>
-                }
-                isOpen={locationDropdownOpen}
-                dropdownItems={locationDropdownItems}
-              />
+              Missing toggle
             </FormGroup>
             <FormGroup
               label="Text"
               fieldId="text"
               isRequired
-              helperText="Label for the link."
             >
               <TextInput
                 isRequired
@@ -156,14 +128,13 @@ const CreateConsoleLinkPage = () => {
                 id="text"
                 name="text"
                 value={text}
-                onChange={setText}
+                onChange={(_event, value) => setText(value)}
               />
             </FormGroup>
             <FormGroup
               label="Link"
               fieldId="href"
               isRequired
-              helperText="Link URL. Must start with https://"
             >
               <TextInput
                 isRequired
@@ -171,7 +142,7 @@ const CreateConsoleLinkPage = () => {
                 id="href"
                 name="href"
                 value={href}
-                onChange={setHref}
+                onChange={(_event, value) => setHref(value)}
                 placeholder="https://www.example.com/"
               />
             </FormGroup>
@@ -180,7 +151,6 @@ const CreateConsoleLinkPage = () => {
                 label="Section"
                 fieldId="section"
                 isRequired
-                helperText="Section to use in the application launcher dropdown. Can be any text."
               >
                 <TextInput
                   isRequired
@@ -188,7 +158,7 @@ const CreateConsoleLinkPage = () => {
                   id="section"
                   name="section"
                   value={section}
-                  onChange={setSection}
+                  onChange={(_event, value) => setSection(value)}
                 />
               </FormGroup>
             )}

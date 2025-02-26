@@ -3,31 +3,30 @@ import Helmet from 'react-helmet';
 import { useHistory } from 'react-router';
 import { k8sCreate, useK8sModel } from '@openshift-console/dynamic-plugin-sdk';
 import {
-  ActionGroup,
-  Alert,
-  Button,
-  Dropdown,
-  DropdownItem,
-  DropdownToggle,
-  Form,
-  FormGroup,
-  FormSection,
-  Grid,
-  Page,
-  PageSection,
-  TextInput,
-  Title,
+	ActionGroup,
+	Alert,
+	Button,
+	Form,
+	FormGroup,
+	FormSection,
+	Grid,
+	Page,
+	PageSection,
+	TextInput,
+	Title
 } from '@patternfly/react-core';
-import CaretDownIcon from '@patternfly/react-icons/dist/js/icons/caret-down-icon';
+
 
 import { ConsoleNotification } from '../../k8s/types';
 import { referenceFor } from '../../k8s/resources';
 
+/*
 const locations: ConsoleNotification['spec']['location'][] = [
   'BannerTop',
   'BannerBottom',
   'BannerTopBottom',
 ];
+*/
 
 const group = 'console.openshift.io';
 const version = 'v1';
@@ -38,26 +37,13 @@ const CreateConsoleNotificationPage = () => {
   const [model] = useK8sModel({ group, version, kind });
   const [name, setName] = React.useState('');
   const [text, setText] = React.useState('');
-  const [location, setLocation] =
+  const [location, _setLocation] =
     React.useState<ConsoleNotification['spec']['location']>('BannerTop');
   const [color, setColor] = React.useState('#ffffff');
   const [backgroundColor, setBackgroundColor] = React.useState('#004b95');
-  const [locationDropdownOpen, setLocationDropdownOpen] = React.useState(false);
   const [inFlight, setInFlight] = React.useState(false);
   const [error, setError] = React.useState('');
   const history = useHistory();
-
-  const locationDropdownItems = locations.map((l) => {
-    const onClick = () => {
-      setLocation(l);
-      setLocationDropdownOpen(false);
-    };
-    return (
-      <DropdownItem key={l} component="button" onClick={onClick}>
-        {l}
-      </DropdownItem>
-    );
-  });
 
   const createNotification = async () => {
     const data: ConsoleNotification = {
@@ -103,18 +89,17 @@ const CreateConsoleNotificationPage = () => {
       </Helmet>
       <Page
         additionalGroupedContent={
-          <PageSection variant="light">
+          <PageSection>
             <Title headingLevel="h1">Create ConsoleNotification</Title>
           </PageSection>
         }
       >
-        <PageSection variant="light">
+        <PageSection>
           <Form isWidthLimited onSubmit={submit}>
             <FormGroup
               label="Name"
               fieldId="name"
               isRequired
-              helperText="Unique name for the notification. This is not displayed to the user."
             >
               <TextInput
                 isRequired
@@ -122,30 +107,16 @@ const CreateConsoleNotificationPage = () => {
                 id="name"
                 name="name"
                 value={name}
-                onChange={setName}
+                onChange={(_event, value) => setName(value)}
                 placeholder="my-notification"
               />
             </FormGroup>
             <FormGroup label="Location" fieldId="location">
-              <Dropdown
-                toggle={
-                  <DropdownToggle
-                    id="toggle-id"
-                    onToggle={setLocationDropdownOpen}
-                    toggleIndicator={CaretDownIcon}
-                  >
-                    {location}
-                  </DropdownToggle>
-                }
-                isOpen={locationDropdownOpen}
-                dropdownItems={locationDropdownItems}
-              />
             </FormGroup>
             <FormGroup
               label="Text"
               fieldId="text"
               isRequired
-              helperText="Message to show the user."
             >
               <TextInput
                 isRequired
@@ -153,7 +124,7 @@ const CreateConsoleNotificationPage = () => {
                 id="text"
                 name="text"
                 value={text}
-                onChange={setText}
+                onChange={(_event, value) => setText(value)}
                 placeholder={textPlaceholder}
               />
             </FormGroup>
