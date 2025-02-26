@@ -153,6 +153,11 @@ const CustomizationTable = ({
 
 const CustomizationList = () => {
   const history = useHistory();
+
+  // FIXME: This works since the array is constant and doesn't change, so the number and order
+  // of the items stays the same between renders. I should see if I can find a better way to
+  // handle this, however.
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const watches = resources.map(({ group, version, kind }) => {
     const [data, loaded, error] = useK8sWatchResource<CustomizationResource[]>({
       groupVersionKind: { group, version, kind },

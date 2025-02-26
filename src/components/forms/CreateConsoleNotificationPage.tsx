@@ -6,19 +6,19 @@ import {
   ActionGroup,
   Alert,
   Button,
-  Dropdown,
-  DropdownItem,
-  DropdownToggle,
   Form,
   FormGroup,
+  FormHelperText,
   FormSection,
+  FormSelect,
+  FormSelectOption,
   Grid,
-  Page,
+  HelperText,
+  HelperTextItem,
   PageSection,
   TextInput,
   Title,
 } from '@patternfly/react-core';
-import CaretDownIcon from '@patternfly/react-icons/dist/js/icons/caret-down-icon';
 
 import { ConsoleNotification } from '../../k8s/types';
 import { referenceFor } from '../../k8s/resources';
@@ -42,22 +42,9 @@ const CreateConsoleNotificationPage = () => {
     React.useState<ConsoleNotification['spec']['location']>('BannerTop');
   const [color, setColor] = React.useState('#ffffff');
   const [backgroundColor, setBackgroundColor] = React.useState('#004b95');
-  const [locationDropdownOpen, setLocationDropdownOpen] = React.useState(false);
   const [inFlight, setInFlight] = React.useState(false);
   const [error, setError] = React.useState('');
   const history = useHistory();
-
-  const locationDropdownItems = locations.map((l) => {
-    const onClick = () => {
-      setLocation(l);
-      setLocationDropdownOpen(false);
-    };
-    return (
-      <DropdownItem key={l} component="button" onClick={onClick}>
-        {l}
-      </DropdownItem>
-    );
-  });
 
   const createNotification = async () => {
     const data: ConsoleNotification = {
@@ -101,115 +88,108 @@ const CreateConsoleNotificationPage = () => {
       <Helmet>
         <title>Create ConsoleNotification</title>
       </Helmet>
-      <Page
-        additionalGroupedContent={
-          <PageSection variant="light">
-            <Title headingLevel="h1">Create ConsoleNotification</Title>
-          </PageSection>
-        }
-      >
-        <PageSection variant="light">
-          <Form isWidthLimited onSubmit={submit}>
-            <FormGroup
-              label="Name"
-              fieldId="name"
+      <PageSection>
+        <Title headingLevel="h1">Create ConsoleNotification</Title>
+      </PageSection>
+      <PageSection>
+        <Form isWidthLimited onSubmit={submit}>
+          <FormGroup label="Name" fieldId="name" isRequired>
+            <TextInput
               isRequired
-              helperText="Unique name for the notification. This is not displayed to the user."
+              type="text"
+              id="name"
+              name="name"
+              value={name}
+              onChange={(_event, value) => setName(value)}
+              placeholder="my-notification"
+            />
+            <FormHelperText>
+              <HelperText>
+                <HelperTextItem>
+                  Unique name for the link. This is not displayed to the user.
+                </HelperTextItem>
+              </HelperText>
+            </FormHelperText>
+          </FormGroup>
+          <FormGroup label="Location" fieldId="location">
+            <FormSelect
+              value={location}
+              onChange={(
+                _event,
+                value: ConsoleNotification['spec']['location'],
+              ) => setLocation(value)}
+              aria-label="FormSelect Input"
+              ouiaId="BasicFormSelect"
             >
-              <TextInput
-                isRequired
-                type="text"
-                id="name"
-                name="name"
-                value={name}
-                onChange={setName}
-                placeholder="my-notification"
-              />
-            </FormGroup>
-            <FormGroup label="Location" fieldId="location">
-              <Dropdown
-                toggle={
-                  <DropdownToggle
-                    id="toggle-id"
-                    onToggle={setLocationDropdownOpen}
-                    toggleIndicator={CaretDownIcon}
-                  >
-                    {location}
-                  </DropdownToggle>
-                }
-                isOpen={locationDropdownOpen}
-                dropdownItems={locationDropdownItems}
-              />
-            </FormGroup>
-            <FormGroup
-              label="Text"
-              fieldId="text"
+              {locations.map((option) => (
+                <FormSelectOption key={option} value={option} label={option} />
+              ))}
+            </FormSelect>
+          </FormGroup>
+          <FormGroup label="Text" fieldId="text" isRequired>
+            <TextInput
               isRequired
-              helperText="Message to show the user."
+              type="text"
+              id="text"
+              name="text"
+              value={text}
+              onChange={(_event, value) => setText(value)}
+              placeholder={textPlaceholder}
+            />
+            <FormHelperText>
+              <HelperText>
+                <HelperTextItem>Message to show the user.</HelperTextItem>
+              </HelperText>
+            </FormHelperText>
+          </FormGroup>
+          <FormSection title="Colors">
+            <Grid hasGutter md={6}>
+              <FormGroup label="Foreground" fieldId="color" isInline>
+                <input
+                  type="color"
+                  id="color"
+                  value={color}
+                  onChange={(e) => setColor(e.currentTarget.value)}
+                />
+              </FormGroup>
+              <FormGroup label="Background" fieldId="backgroundColor" isInline>
+                <input
+                  type="color"
+                  id="backgroundColor"
+                  value={backgroundColor}
+                  onChange={(e) => setBackgroundColor(e.currentTarget.value)}
+                />
+              </FormGroup>
+            </Grid>
+          </FormSection>
+          <FormSection title="Preview">
+            <div
+              className="co-global-notification"
+              data-test="test-BannerTop"
+              style={{ backgroundColor, color }}
             >
-              <TextInput
-                isRequired
-                type="text"
-                id="text"
-                name="text"
-                value={text}
-                onChange={setText}
-                placeholder={textPlaceholder}
-              />
-            </FormGroup>
-            <FormSection title="Colors">
-              <Grid hasGutter md={6}>
-                <FormGroup label="Foreground" fieldId="color" isInline>
-                  <input
-                    type="color"
-                    id="color"
-                    value={color}
-                    onChange={(e) => setColor(e.currentTarget.value)}
-                  />
-                </FormGroup>
-                <FormGroup
-                  label="Background"
-                  fieldId="backgroundColor"
-                  isInline
-                >
-                  <input
-                    type="color"
-                    id="backgroundColor"
-                    value={backgroundColor}
-                    onChange={(e) => setBackgroundColor(e.currentTarget.value)}
-                  />
-                </FormGroup>
-              </Grid>
-            </FormSection>
-            <FormSection title="Preview">
-              <div
-                className="co-global-notification"
-                data-test="test-BannerTop"
-                style={{ backgroundColor, color }}
-              >
-                <div className="co-global-notification__content">
-                  <p className="co-global-notification__text">
-                    {text || textPlaceholder}
-                  </p>
-                </div>
+              <div className="co-global-notification__content">
+                <p className="co-global-notification__text">
+                  {text || textPlaceholder}
+                </p>
               </div>
-            </FormSection>
-            {error && (
-              <Alert variant="danger" isInline title="Error creating link">
-                {error}
-              </Alert>
-            )}
-            <ActionGroup>
-              <Button variant="primary" type="submit" isDisabled={inFlight}>
-                Submit
-              </Button>
-              <Button variant="secondary" type="button" onClick={cancel}>
-                Cancel
-              </Button>
-            </ActionGroup>
-          </Form>
-        </PageSection>
-      </Page>
+            </div>
+          </FormSection>
+          {error && (
+            <Alert variant="danger" isInline title="Error creating link">
+              {error}
+            </Alert>
+          )}
+          <ActionGroup>
+            <Button variant="primary" type="submit" isDisabled={inFlight}>
+              Submit
+            </Button>
+            <Button variant="secondary" type="button" onClick={cancel}>
+              Cancel
+            </Button>
+          </ActionGroup>
+        </Form>
+      </PageSection>
     </>
   );
 };

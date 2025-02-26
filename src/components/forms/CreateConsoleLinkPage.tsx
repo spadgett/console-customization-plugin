@@ -6,17 +6,17 @@ import {
   ActionGroup,
   Alert,
   Button,
-  Dropdown,
-  DropdownItem,
-  DropdownToggle,
   Form,
   FormGroup,
-  Page,
+  FormHelperText,
+  FormSelect,
+  FormSelectOption,
+  HelperText,
+  HelperTextItem,
   PageSection,
   TextInput,
   Title,
 } from '@patternfly/react-core';
-import CaretDownIcon from '@patternfly/react-icons/dist/js/icons/caret-down-icon';
 
 import { ConsoleLink } from '../../k8s/types';
 import { referenceFor } from '../../k8s/resources';
@@ -40,22 +40,9 @@ const CreateConsoleLinkPage = () => {
     React.useState<ConsoleLink['spec']['location']>('ApplicationMenu');
   const [href, setHref] = React.useState('');
   const [section, setSection] = React.useState('');
-  const [locationDropdownOpen, setLocationDropdownOpen] = React.useState(false);
   const [inFlight, setInFlight] = React.useState(false);
   const [error, setError] = React.useState('');
   const history = useHistory();
-
-  const locationDropdownItems = locations.map((l) => {
-    const onClick = () => {
-      setLocation(l);
-      setLocationDropdownOpen(false);
-    };
-    return (
-      <DropdownItem key={l} component="button" onClick={onClick}>
-        {l}
-      </DropdownItem>
-    );
-  });
 
   const createLink = async () => {
     const data: ConsoleLink = {
@@ -104,110 +91,111 @@ const CreateConsoleLinkPage = () => {
       <Helmet>
         <title>Create ConsoleLink</title>
       </Helmet>
-      <Page
-        additionalGroupedContent={
-          <PageSection variant="light">
-            <Title headingLevel="h1">Create ConsoleLink</Title>
-          </PageSection>
-        }
-      >
-        <PageSection variant="light">
-          <Form isWidthLimited onSubmit={submit}>
-            <FormGroup
-              label="Name"
-              fieldId="name"
+      <PageSection>
+        <Title headingLevel="h1">Create ConsoleLink</Title>
+      </PageSection>
+      <PageSection>
+        <Form isWidthLimited onSubmit={submit}>
+          <FormGroup label="Name" fieldId="name" isRequired>
+            <TextInput
               isRequired
-              helperText="Unique name for the link. This is not displayed to the user."
+              type="text"
+              id="name"
+              name="name"
+              value={name}
+              onChange={(_event, value) => setName(value)}
+              placeholder="my-link"
+            />
+            <FormHelperText>
+              <HelperText>
+                <HelperTextItem>
+                  Unique name for the link. This is not displayed to the user.
+                </HelperTextItem>
+              </HelperText>
+            </FormHelperText>
+          </FormGroup>
+          <FormGroup label="Location" fieldId="location">
+            <FormSelect
+              value={location}
+              onChange={(_event, value: ConsoleLink['spec']['location']) =>
+                setLocation(value)
+              }
+              aria-label="FormSelect Input"
+              ouiaId="BasicFormSelect"
             >
+              {locations.map((option) => (
+                <FormSelectOption key={option} value={option} label={option} />
+              ))}
+            </FormSelect>
+          </FormGroup>
+          <FormGroup label="Text" fieldId="text" isRequired>
+            <TextInput
+              isRequired
+              type="text"
+              id="text"
+              name="text"
+              value={text}
+              onChange={(_event, value) => setText(value)}
+            />
+            <FormHelperText>
+              <HelperText>
+                <HelperTextItem>Label for the link.</HelperTextItem>
+              </HelperText>
+            </FormHelperText>
+          </FormGroup>
+          <FormGroup label="Link" fieldId="href" isRequired>
+            <TextInput
+              isRequired
+              type="url"
+              id="href"
+              name="href"
+              value={href}
+              onChange={(_event, value) => setHref(value)}
+              placeholder="https://www.example.com/"
+            />
+            <FormHelperText>
+              <HelperText>
+                <HelperTextItem>
+                  Link URL. Must start with https://
+                </HelperTextItem>
+              </HelperText>
+            </FormHelperText>
+          </FormGroup>
+          {location === 'ApplicationMenu' && (
+            <FormGroup label="Section" fieldId="section" isRequired>
               <TextInput
                 isRequired
                 type="text"
-                id="name"
-                name="name"
-                value={name}
-                onChange={setName}
-                placeholder="my-link"
+                id="section"
+                name="section"
+                value={section}
+                onChange={(_event, value) => setSection(value)}
               />
+              <FormHelperText>
+                <HelperText>
+                  <HelperTextItem>
+                    Section to use in the application launcher dropdown. Can be
+                    any text.
+                  </HelperTextItem>
+                </HelperText>
+              </FormHelperText>
             </FormGroup>
-            <FormGroup label="Location" fieldId="location">
-              <Dropdown
-                toggle={
-                  <DropdownToggle
-                    id="toggle-id"
-                    onToggle={setLocationDropdownOpen}
-                    toggleIndicator={CaretDownIcon}
-                  >
-                    {location}
-                  </DropdownToggle>
-                }
-                isOpen={locationDropdownOpen}
-                dropdownItems={locationDropdownItems}
-              />
-            </FormGroup>
-            <FormGroup
-              label="Text"
-              fieldId="text"
-              isRequired
-              helperText="Label for the link."
-            >
-              <TextInput
-                isRequired
-                type="text"
-                id="text"
-                name="text"
-                value={text}
-                onChange={setText}
-              />
-            </FormGroup>
-            <FormGroup
-              label="Link"
-              fieldId="href"
-              isRequired
-              helperText="Link URL. Must start with https://"
-            >
-              <TextInput
-                isRequired
-                type="url"
-                id="href"
-                name="href"
-                value={href}
-                onChange={setHref}
-                placeholder="https://www.example.com/"
-              />
-            </FormGroup>
-            {location === 'ApplicationMenu' && (
-              <FormGroup
-                label="Section"
-                fieldId="section"
-                isRequired
-                helperText="Section to use in the application launcher dropdown. Can be any text."
-              >
-                <TextInput
-                  isRequired
-                  type="text"
-                  id="section"
-                  name="section"
-                  value={section}
-                  onChange={setSection}
-                />
-              </FormGroup>
-            )}
-            {error && (
-              <Alert variant="danger" isInline title="Error creating link">
-                {error}
-              </Alert>
-            )}
-            <ActionGroup>
-              <Button variant="primary" type="submit" isDisabled={inFlight}>
-                Submit
-              </Button>
-              <Button variant="secondary" type="button" onClick={cancel}>
-                Cancel
-              </Button>
-            </ActionGroup>
-          </Form>
-        </PageSection>
-      </Page>
+          )}
+          {error && (
+            <Alert variant="danger" isInline title="Error creating link">
+              {error}
+            </Alert>
+          )}
+          <ActionGroup>
+            <Button variant="primary" type="submit" isDisabled={inFlight}>
+              Submit
+            </Button>
+            <Button variant="secondary" type="button" onClick={cancel}>
+              Cancel
+            </Button>
+          </ActionGroup>
+        </Form>
+      </PageSection>
     </>
   );
 };
